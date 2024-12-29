@@ -5,11 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Item
+  - Effect
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Particle
   - Water
   - UI
   - Player
@@ -41,4 +43,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Environment
+    uniqueID: 2122361779
+    locked: 0
+  - name: Interacable
+    uniqueID: 2347775365
+    locked: 0
+  - name: Character
+    uniqueID: 1234238955
+    locked: 0
+  - name: Foreground
+    uniqueID: 3270148255
     locked: 0
