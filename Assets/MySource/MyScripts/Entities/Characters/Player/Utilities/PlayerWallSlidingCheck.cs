@@ -24,18 +24,27 @@ public class PlayerWallSlidingCheck : WallSlidingCheck<PlayerWallSlidingCheck>, 
 
     public bool CheckCollisionLeft()
     {
-        RaycastHit2D hit = Physics2D.CapsuleCast(playerCtrl.transform.position, sizeCollider,
-                CapsuleDirection2D.Vertical, 0, Vector2.left, distanceChecking);
+        ContactFilter2D filter2D = new ContactFilter2D();
+        filter2D.useTriggers = false;
+        filter2D.SetLayerMask(Physics2D.GetLayerCollisionMask(playerCtrl.gameObject.layer));
 
-        return hit.collider != null && !hit.collider.isTrigger;
+        RaycastHit2D hit = Physics2D.CapsuleCast(playerCtrl.transform.position, sizeCollider,
+                CapsuleDirection2D.Vertical, 0, Vector2.left, distanceChecking, filter2D.layerMask);
+
+        return hit.collider != null;
+        // return hit.collider != null && !hit.collider.isTrigger;
     }
 
     public bool CheckCollisionRight()
     {
-        RaycastHit2D hit = Physics2D.CapsuleCast(playerCtrl.transform.position, sizeCollider,
-                CapsuleDirection2D.Vertical, 0, Vector2.right, distanceChecking);
+        ContactFilter2D filter2D = new ContactFilter2D();
+        filter2D.useTriggers = false;
+        filter2D.SetLayerMask(Physics2D.GetLayerCollisionMask(playerCtrl.gameObject.layer));
 
-        return hit.collider != null && !hit.collider.isTrigger;
+        RaycastHit2D hit = Physics2D.CapsuleCast(playerCtrl.transform.position, sizeCollider,
+                CapsuleDirection2D.Vertical, 0, Vector2.right, distanceChecking, filter2D.layerMask);
+
+        return hit.collider != null;
     }
 
     protected override bool CheckWallSliding()

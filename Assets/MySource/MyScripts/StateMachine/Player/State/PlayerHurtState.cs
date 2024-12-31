@@ -6,8 +6,8 @@ public class PlayerHurtState : IState
 {
     private readonly PlayerController playerCtrl;
     private readonly PlayerStateMachine playerState;
-    private readonly float invincibleTime = 2.8f;
-    private float timer = 0;
+    private readonly float invincibleDuration = 3.6f;
+    private float invincibleTimer = 0;
 
     public PlayerHurtState(PlayerController _playerCtrl, PlayerStateMachine playerState)
     {
@@ -22,14 +22,15 @@ public class PlayerHurtState : IState
         playerCtrl.gameObject.layer = 9; //Set layer is IgnoreHazards layer
 
         // Set InvincibleTime
-        this.timer = this.invincibleTime;
+        this.invincibleTimer = this.invincibleDuration;
     }
 
     public void Excute()
     {
         this.ReduceSpeed(0.94f);
-        this.timer -= Time.deltaTime;
-        if (this.timer > 0 && playerCtrl.rb.velocity.magnitude > 0.1f) return;
+        this.invincibleTimer -= Time.deltaTime;
+
+        if (playerCtrl.rb.velocity.magnitude > 0.1f) return;
 
         CoroutineManager.Instance.StartManagedCoroutine(ChangeIdleStateRoutine());
     }
@@ -57,7 +58,7 @@ public class PlayerHurtState : IState
     {
         playerCtrl.anim.SetTrigger("exit");
 
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.6f);
         playerCtrl.anim.ResetTrigger("exit");
         playerCtrl.gameObject.layer = 6; //Set layer is Player layer
     }
