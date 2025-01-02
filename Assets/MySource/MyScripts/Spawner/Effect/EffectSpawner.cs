@@ -18,5 +18,6 @@ public enum EEffectCode
 {
     BreakBox1,
     BreakBox2,
-    BreakBox3
+    BreakBox3,
+    BreakBullet1
 }

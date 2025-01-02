@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreakBoxEffect : BaseMonoBehaviour
+public class BreakBulletEffect : BaseMonoBehaviour
 {
     [SerializeField] protected List<Rigidbody2D> rbFragments;
-    [SerializeField] protected float explosionForce = 4f;
-    [SerializeField] protected float upwardBias = 2f;
     [SerializeField] protected float torqueRange;
 
     protected override void LoadComponent()
@@ -41,9 +39,7 @@ public class BreakBoxEffect : BaseMonoBehaviour
         foreach (var rb in this.rbFragments)
         {
             Vector2 randDirection = Random.insideUnitCircle.normalized;
-            randDirection.y += this.upwardBias;
-
-            rb.AddForce(randDirection * this.explosionForce, ForceMode2D.Impulse);
+            rb.AddForce(randDirection * 0.4f, ForceMode2D.Impulse);
             rb.AddTorque(Random.Range(-torqueRange, torqueRange));
         }
         CoroutineManager.Instance.StartManagedCoroutine(this.DelayDes());
@@ -61,13 +57,13 @@ public class BreakBoxEffect : BaseMonoBehaviour
     public IEnumerator DelayDes()
     {
         int count = this.rbFragments.Count;
-        float minTimer = 5.4f;
+        float minTimer = 4.4f;
 
         while (count > 0)
         {
             if (count > 1)
             {
-                float delay = Random.Range(1f, 1.4f);
+                float delay = Random.Range(2f, 3.4f);
                 minTimer -= delay;
                 yield return new WaitForSeconds(delay);
             }

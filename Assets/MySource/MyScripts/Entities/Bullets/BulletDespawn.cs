@@ -1,3 +1,6 @@
+using System.Collections;
+using UnityEngine;
+
 public class BulletDespawn : BaseMonoBehaviour
 {
     public void Despawn()

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BulletDamageSender : DamageSender
+public class BulletImpart : BaseMonoBehaviour
 {
     [SerializeField] protected BulletController bulletCtrl;
 
@@ -12,10 +12,7 @@ public class BulletDamageSender : DamageSender
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Damageable damageable = other.gameObject.GetComponent<Damageable>();
-            this.SendDamage(damageable);
-        }
+        EffectSpawner.Instance.Spawn(EEffectCode.BreakBullet1, transform.position);
+        this.bulletCtrl.BulletDespawn.Despawn();
     }
 }

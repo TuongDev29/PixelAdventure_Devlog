@@ -1,21 +1,31 @@
 
 using System;
-using System.Collections.Generic;
 
-public class LimitedInvoker : Singleton<LimitedInvoker>
+public class LimitedInvoker
 {
-    private Dictionary<Action, int> invokerActions = new Dictionary<Action, int>();
+    private Action action;
+    private int invokeNumber;
 
-    public void Invoke(Action function, int invokeNumber)
+    public LimitedInvoker(Action action, int invokeNumber = 0)
     {
-        if (!invokerActions.ContainsKey(function))
-        {
-            invokerActions[function] = invokeNumber;
-        }
+        this.action = action;
+        this.invokeNumber = invokeNumber;
+    }
 
-        if (invokerActions[function] <= 0) return;
+    public void IncreateInvoke()
+    {
+        this.invokeNumber += 1;
+    }
 
-        function.Invoke();
-        invokerActions[function] -= 1;
+    public void AddInvokeNumber(int num)
+    {
+        this.invokeNumber = num;
+    }
+
+    public void Invoke()
+    {
+        if (this.invokeNumber <= 0) return;
+        this.action.Invoke();
+        this.invokeNumber--;
     }
 }

@@ -8,11 +8,13 @@ public class PlayerHurtState : IState
     private readonly PlayerStateMachine playerState;
     private readonly float invincibleDuration = 3.6f;
     private float invincibleTimer = 0;
+    private LimitedInvoker limitedInvoker;
 
     public PlayerHurtState(PlayerController _playerCtrl, PlayerStateMachine playerState)
     {
         this.playerCtrl = _playerCtrl;
         this.playerState = playerState;
+        this.limitedInvoker = new LimitedInvoker(ChangeIdleStateFunc);
     }
 
     public void Enter()
@@ -23,6 +25,7 @@ public class PlayerHurtState : IState
 
         // Set InvincibleTime
         this.invincibleTimer = this.invincibleDuration;
+        this.limitedInvoker.AddInvokeNumber(1);
     }
 
     public void Excute()
@@ -32,12 +35,17 @@ public class PlayerHurtState : IState
 
         if (playerCtrl.rb.velocity.magnitude > 0.1f) return;
 
-        CoroutineManager.Instance.StartManagedCoroutine(ChangeIdleStateRoutine());
+        this.limitedInvoker.Invoke();
     }
 
     public void Exit()
     {
         CoroutineManager.Instance.StartManagedCoroutine(ExitRoutine());
+    }
+
+    private void ChangeIdleStateFunc()
+    {
+        CoroutineManager.Instance.StartManagedCoroutine(ChangeIdleStateRoutine());
     }
 
     private void ReduceSpeed(float factor)
@@ -63,24 +71,3 @@ public class PlayerHurtState : IState
         playerCtrl.gameObject.layer = 6; //Set layer is Player layer
     }
 }
-
-
-//  private IEnumerator HurtTransitionAndIgnoreHazardsChecking()
-//     {
-//         playerCtrl.PlayerState.DisableTransition();
-//         playerCtrl.gameObject.layer = 9; //Set layer is IgnoreHazards layer
-
-//         yield return new WaitForSeconds(0.2f);
-//         while (!playerCtrl.PlayerState.CanTransition &&
-//             playerCtrl.rb.velocity.magnitude > 0.1f)
-//         {
-//             if (playerCtrl.PlayerState.CompareState(EPlayerState.Dead)) yield break;
-
-//             yield return new WaitForSeconds(0.2f);
-//         }
-
-//         playerCtrl.PlayerState.EnableTransition();
-
-//         yield return new WaitForSeconds(0.4f);
-//         playerCtrl.gameObject.layer = 6; //Set layer is Player layer
-//     }

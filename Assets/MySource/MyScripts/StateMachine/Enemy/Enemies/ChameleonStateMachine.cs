@@ -40,6 +40,7 @@ public class ChameleonStateMachine : EnemyStateMachine
         this.AddTransitionForState(EEnemyState.Idle, EEnemyState.Patrol, Cooldown);
         this.AddTransitionForState(EEnemyState.Idle, EEnemyState.Attack, IsPlayerInAttackRange);
         //Transition for Patrol State
+        this.AddTransitionForState(EEnemyState.Patrol, EEnemyState.Attack, IsPlayerInAttackRange);
         this.AddTransitionForState(EEnemyState.Patrol, EEnemyState.Idle, IsPatrolRange, this.SelectNextPatrolPoint);
         this.AddTransitionForState(EEnemyState.Patrol, EEnemyState.Chase, IsPlayerInRange);
         //Transition for Chase State

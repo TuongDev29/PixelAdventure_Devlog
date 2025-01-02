@@ -15,6 +15,7 @@ public class EnemyAttackState : BaseEnemyState
     public override void Enter()
     {
         this.attacked = false;
+        this.enemyCtrl.FacingHandler.FlipTowards(this.GetDirectionAttack());
         this.enemyCtrl.anim.SetTrigger("attack");
     }
 
@@ -28,24 +29,25 @@ public class EnemyAttackState : BaseEnemyState
         }
     }
 
-    // public override EEnemyState CheckTransitions()
-    // {
-    //     if (isAttacking) return EEnemyState.None;
-
-    //     return base.CheckTransitions();
-    // }
-
     private void Attack()
     {
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)enemyCtrl.transform.position + new Vector2(0, -0.08f),
-            enemyCtrl.FacingHandler.IsFacingRight ? Vector2.right : Vector2.left, this.enemyCtrl.EnemyData.attackRange);
+        ContactFilter2D filter2D = new ContactFilter2D();
+        filter2D.useTriggers = false;
+        filter2D.SetLayerMask(Physics2D.GetLayerCollisionMask(enemyCtrl.gameObject.layer));
 
-        if (hit.collider != null && hit.collider.CompareTag("Player"))
+        Vector2 startPoint = (Vector2)enemyCtrl.transform.position + new Vector2(0, -0.08f);
+        Vector2 direction = enemyCtrl.FacingHandler.IsFacingRight ? Vector2.right : Vector2.left;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(startPoint, direction, this.enemyCtrl.EnemyData.attackRange, filter2D.layerMask);
+
+        foreach (var hit in hits)
         {
-            IDamageable damageable = hit.collider.GetComponent<IDamageable>();
-            if (damageable == null) return;
-
-            damageable.Receiver(this.enemyCtrl.EnemyData.damage, enemyCtrl.transform.position);
+            if (hit.collider != null && hit.collider.CompareTag("Player"))
+            {
+                IDamageable damageable = hit.collider.GetComponent<IDamageable>();
+                if (damageable == null) return;
+                damageable.Receiver(this.enemyCtrl.EnemyData.damage, enemyCtrl.transform.position);
+            }
         }
     }
 

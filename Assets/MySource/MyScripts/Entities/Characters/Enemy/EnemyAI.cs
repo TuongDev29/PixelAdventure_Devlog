@@ -41,4 +41,24 @@ public class EnemyAI : BaseMonoBehaviour
         this.blackboard.SetValue(EEnemyBlackBoard.PatrolIndex, 0);
         this.blackboard.SetValue(EEnemyBlackBoard.IsHungry, false);
     }
+
+    // private void OnDrawGizmos()
+    // {
+    //     if (enemyCtrl == null) return;
+
+    //     // Lấy vị trí ban đầu của Raycast.
+    //     Vector2 startPoint = (Vector2)enemyCtrl.transform.position + new Vector2(0, -0.08f);
+
+    //     // Lấy hướng của Raycast.
+    //     Vector2 direction = enemyCtrl.FacingHandler.IsFacingRight ? Vector2.right : Vector2.left;
+
+    //     // Tính điểm kết thúc của Raycast.
+    //     Vector2 endPoint = startPoint + direction * enemyCtrl.EnemyData.attackRange;
+
+    //     // Chọn màu cho Gizmos.
+    //     Gizmos.color = Color.red;
+
+    //     // Vẽ Raycast.
+    //     // Gizmos.DrawLine(startPoint, endPoint);
+    // }
 }

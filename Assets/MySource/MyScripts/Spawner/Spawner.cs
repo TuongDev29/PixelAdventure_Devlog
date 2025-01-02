@@ -39,7 +39,6 @@ public abstract class Spawner<T> : BaseMonoBehaviour where T : Enum
     public GameObject Spawn(T ECode, Vector2 position)
     {
         ObjectPolling objectPolling = this.GetObjectPollingByType(ECode);
-        Debug.Log(objectPolling == null);
 
         GameObject obj = objectPolling.SpawnObjectFromPool(position);
 
